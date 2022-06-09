@@ -1,0 +1,21 @@
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "eriawan@mail.com",
+  "password": "eri12345"
+}
+
+###
+POST http://localhost:3000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "Eriawan Hidayat",
+  "email": "eriawan@mail.com",
+  "password": "eri12345",
+  "confirm_password": "eri12345"
+}
+
+###
+

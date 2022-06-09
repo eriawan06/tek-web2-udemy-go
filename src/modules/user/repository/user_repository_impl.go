@@ -53,10 +53,7 @@ func (repository *UserRepositoryImpl) FindAll() ([]entity.User, error) {
 func (repository *UserRepositoryImpl) FindById(userId uint) (entity.User, error) {
 	var user entity.User
 
-	result := repository.DB.
-		Where("id = ?", userId).
-		Joins("UserRole").
-		First(&user)
+	result := repository.DB.Where("id = ?", userId).First(&user)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			result.Error = e.ErrDataNotFound

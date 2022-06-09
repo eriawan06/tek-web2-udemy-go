@@ -1,9 +1,40 @@
+GET http://localhost:3000/api/v1/categories/3
+Accept: application/json
+
+###
+GET http://localhost:3000/api/v1/categories
+Accept: application/json
+
+###
+DELETE http://localhost:3000/api/v1/categories/8
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6InRhdWZpa0BtYWlsLmNvbSIsImV4cGlyZWQiOjE2NTczNzA2NjQsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOjJ9.LGtOHtA9F1qu9uPT7NwLfvg-AgZdYMKAc5xOfMuQzas
+
+###
+PUT http://localhost:3000/api/v1/categories/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6InRhdWZpa0BtYWlsLmNvbSIsImV4cGlyZWQiOjE2NTczNzA2NjQsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOjJ9.LGtOHtA9F1qu9uPT7NwLfvg-AgZdYMKAc5xOfMuQzas
+
+{
+  "name": "Artificial Intelligence"
+}
+
+###
+POST http://localhost:3000/api/v1/categories
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6InRhdWZpa0BtYWlsLmNvbSIsImV4cGlyZWQiOjE2NTczNzA2NjQsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOjJ9.LGtOHtA9F1qu9uPT7NwLfvg-AgZdYMKAc5xOfMuQzas
+
+{
+  "name": "Delete"
+}
+
+###
 POST http://localhost:3000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "eriawan@mail.com",
-  "password": "eri12345"
+  "email": "taufik@mail.com",
+  "password": "taufik12345"
 }
 
 ###
@@ -11,10 +42,11 @@ POST http://localhost:3000/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "name": "Eriawan Hidayat",
-  "email": "eriawan@mail.com",
-  "password": "eri12345",
-  "confirm_password": "eri12345"
+  "name": "Taufik Hidayat",
+  "email": "taufik@mail.com",
+  "password": "taufik12345",
+  "confirm_password": "taufik12345",
+  "role": "admin"
 }
 
 ###

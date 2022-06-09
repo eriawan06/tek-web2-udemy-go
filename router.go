@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/eriawan06/tek-web2-udemy-go/src/modules/category"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,14 +20,18 @@ func SetupRoutes(app *gin.Engine) {
 		})
 	})
 
-	// Setup Routes Group
-	authGroup := app.Group("/api/v1/auth")
-	{
-		auth.NewRouter(authGroup)
-	}
-
 	v1 := app.Group("/api/v1")
 	{
-		v1.Use(middlewares.JwtAuthMiddleware())
+		public := v1.Group("")
+		{
+			auth.NewRouter(public.Group("/auth"))
+			category.NewPublicRouter(public.Group("/categories"))
+		}
+
+		private := v1.Group("")
+		{
+			private.Use(middlewares.JwtAuthMiddleware())
+			category.NewRouter(private.Group("/categories"))
+		}
 	}
 }

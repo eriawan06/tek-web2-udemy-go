@@ -9,6 +9,7 @@ type RegisterRequest struct {
 	Email           string `json:"email" binding:"required"`
 	Password        string `json:"password" binding:"required"`
 	ConfirmPassword string `json:"confirm_password" binding:"required"`
+	Role            string `json:"role" binding:"required"`
 }
 
 type LoginRequest struct {
@@ -20,8 +21,7 @@ type UserClaims struct {
 	Authorized bool   `json:"authorized"`
 	UserId     uint   `json:"user_id"`
 	Email      string `json:"email"`
-	RoleId     uint   `json:"role_id"`
-	RoleName   string `json:"role_name"`
+	Role       string `json:"role"`
 	Expired    int64  `json:"expired"`
 }
 

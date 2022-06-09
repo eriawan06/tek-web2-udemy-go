@@ -11,7 +11,7 @@ func RegisterRequestToUser(request dto.RegisterRequest) entity.User {
 		Name:     request.Name,
 		Email:    request.Email,
 		Password: request.Password,
-		Role:     "user",
+		Role:     request.Role,
 		BaseEntity: common.BaseEntity{
 			CreatedBy: "self",
 			UpdatedBy: "self",

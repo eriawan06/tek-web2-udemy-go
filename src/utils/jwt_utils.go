@@ -92,16 +92,14 @@ func GetUserCredentialFromToken(context *gin.Context) (ad.UserClaims, error) {
 		authorized := claims["authorized"].(bool)
 		userId := uint(claims["user_id"].(float64))
 		email := fmt.Sprintf("%v", claims["email"])
-		roleId := uint(claims["role_id"].(float64))
-		roleName := fmt.Sprintf("%v", claims["role_name"])
+		role := fmt.Sprintf("%v", claims["role"])
 		expired := int64(math.Round(claims["expired"].(float64)))
 
 		// Assign to User Claims Object
 		userClaims.Authorized = authorized
 		userClaims.UserId = userId
 		userClaims.Email = email
-		userClaims.RoleId = roleId
-		userClaims.RoleName = roleName
+		userClaims.Role = role
 		userClaims.Expired = expired
 
 		// Return Value

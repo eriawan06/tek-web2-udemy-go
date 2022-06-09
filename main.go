@@ -4,6 +4,7 @@ import (
 	"github.com/eriawan06/tek-web2-udemy-go/src/cores/database"
 	"github.com/eriawan06/tek-web2-udemy-go/src/middlewares"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/auth"
+	"github.com/eriawan06/tek-web2-udemy-go/src/modules/category"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/user"
 	"github.com/gin-gonic/gin"
 	"os"
@@ -17,6 +18,7 @@ func main() {
 	// initialize modules/apps
 	auth.New(db).InitModule()
 	user.New(db).InitModule()
+	category.New(db).InitModule()
 
 	// Get Gin Mode from ENV
 	mode := os.Getenv("GIN_MODE")

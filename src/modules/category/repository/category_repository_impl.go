@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/category/model/entity"
 	e "github.com/eriawan06/tek-web2-udemy-go/src/utils/errors"
-	"github.com/go-sql-driver/mysql"
+	"github.com/jackc/pgconn"
 	"gorm.io/gorm"
 )
 
@@ -18,8 +18,8 @@ func NewCategoryRepository(db *gorm.DB) CategoryRepository {
 
 func (repository CategoryRepositoryImpl) Create(category entity.Category) error {
 	result := repository.DB.Create(&category)
-	var mySqlErr *mysql.MySQLError
-	if errors.As(result.Error, &mySqlErr) && mySqlErr.Number == 1062 {
+	var postgreErr *pgconn.PgError
+	if errors.As(result.Error, &postgreErr) && postgreErr.Code == "23505" {
 		result.Error = e.ErrDuplicateKey
 	}
 	return result.Error

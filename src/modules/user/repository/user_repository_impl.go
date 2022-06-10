@@ -4,9 +4,8 @@ import (
 	"errors"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/user/model/entity"
 	e "github.com/eriawan06/tek-web2-udemy-go/src/utils/errors"
-	"github.com/go-sql-driver/mysql"
+	"github.com/jackc/pgconn"
 	"gorm.io/gorm"
-	"strings"
 )
 
 type UserRepositoryImpl struct {
@@ -20,9 +19,9 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 func (repository *UserRepositoryImpl) Create(user entity.User) error {
 	result := repository.DB.Create(&user)
 
-	var mySqlErr *mysql.MySQLError
-	if errors.As(result.Error, &mySqlErr) && mySqlErr.Number == 1062 {
-		if strings.Contains(mySqlErr.Message, "idx_users_email") {
+	var postgreErr *pgconn.PgError
+	if errors.As(result.Error, &postgreErr) && postgreErr.Code == "23505" {
+		if postgreErr.ConstraintName == "idx_users_email" {
 			result.Error = e.ErrEmailAlreadyExists
 		}
 	}

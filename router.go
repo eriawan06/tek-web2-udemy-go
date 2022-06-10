@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/category"
+	"github.com/eriawan06/tek-web2-udemy-go/src/modules/course"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,12 +27,15 @@ func SetupRoutes(app *gin.Engine) {
 		{
 			auth.NewRouter(public.Group("/auth"))
 			category.NewPublicRouter(public.Group("/categories"))
+			course.NewPublicRouter(public.Group("/courses"))
 		}
 
 		private := v1.Group("")
 		{
 			private.Use(middlewares.JwtAuthMiddleware())
+
 			category.NewRouter(private.Group("/categories"))
+			course.NewRouter(private.Group("/courses"))
 		}
 	}
 }

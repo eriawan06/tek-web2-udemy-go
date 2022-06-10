@@ -7,7 +7,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -23,18 +23,19 @@ func SetupDatabase() *gorm.DB {
 	}
 
 	// Assign ENV value to Variable
-	dbUsername := os.Getenv("MYSQL_USERNAME")
-	dbPassword := os.Getenv("MYSQL_PASSWORD")
-	dbHost := os.Getenv("MYSQL_HOST")
-	dbPort := os.Getenv("MYSQL_PORT")
-	dbName := os.Getenv("MYSQL_DBNAME")
+	//dbUsername := os.Getenv("POSTGRESQL_USERNAME")
+	//dbPassword := os.Getenv("POSTGRESQL_PASSWORD")
+	//dbHost := os.Getenv("POSTGRESQL_HOST")
+	//dbPort := os.Getenv("POSTGRESQL_PORT")
+	//dbName := os.Getenv("POSTGRESQL_DBNAME")
+	dbUrl := os.Getenv("POSTGRESQL_URL")
 
 	// Database URL ( Data Source Name )
-	dsn := dbUsername + ":" + dbPassword + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
+	//dsn := dbUsername + ":" + dbPassword + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
 
 	// Connect to Database
 	// db, err := sql.Open("mysql", dsn)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{
 		NowFunc: func() time.Time {
 			return time.Now().Local()
 		},

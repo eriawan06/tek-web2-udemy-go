@@ -1,4 +1,44 @@
-GET http://localhost:3000/api/v1/categories/3
+GET http://localhost:3000/api/v1/courses/1
+Accept: application/json
+
+###
+GET http://localhost:3000/api/v1/courses
+Accept: application/json
+
+###
+DELETE http://localhost:3000/api/v1/courses/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6ImVyaWF3YW5AbWFpbC5jb20iLCJleHBpcmVkIjoxNjU3NDM4NjExLCJyb2xlIjoidXNlciIsInVzZXJfaWQiOjJ9.0VrVLEvSbPLA2Bks-zo5LtPeju1EorMiPtt044zq01A
+
+###
+PUT http://localhost:3000/api/v1/courses/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6ImVyaWF3YW5AbWFpbC5jb20iLCJleHBpcmVkIjoxNjU3NDM4NjExLCJyb2xlIjoidXNlciIsInVzZXJfaWQiOjJ9.0VrVLEvSbPLA2Bks-zo5LtPeju1EorMiPtt044zq01A
+
+{
+  "name": "Course Lorem",
+  "excerpt": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+  "learn_summary": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+  "requirement": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable",
+  "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old"
+}
+
+###
+POST http://localhost:3000/api/v1/courses
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6ImVyaWF3YW5AbWFpbC5jb20iLCJleHBpcmVkIjoxNjU3NDM4NjExLCJyb2xlIjoidXNlciIsInVzZXJfaWQiOjJ9.0VrVLEvSbPLA2Bks-zo5LtPeju1EorMiPtt044zq01A
+
+{
+  "name": "Course 1",
+  "excerpt": "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+  "learn_summary": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+  "requirement": "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable",
+  "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old",
+  "categories": [2,3]
+}
+
+###
+GET http://localhost:3000/api/v1/categories/10
 Accept: application/json
 
 ###
@@ -22,10 +62,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0c
 ###
 POST http://localhost:3000/api/v1/categories
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6InRhdWZpa0BtYWlsLmNvbSIsImV4cGlyZWQiOjE2NTczNzA2NjQsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOjJ9.LGtOHtA9F1qu9uPT7NwLfvg-AgZdYMKAc5xOfMuQzas
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6InRhdWZpa0BtYWlsLmNvbSIsImV4cGlyZWQiOjE2NTc0Mzg1MzAsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOjF9.ppxWr6kUfkQL6NpvuUupvGNQA8LqIp-YVoGma77MCRc
 
 {
-  "name": "Delete"
+  "name": "Music & Art"
 }
 
 ###
@@ -33,8 +73,8 @@ POST http://localhost:3000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "taufik@mail.com",
-  "password": "taufik12345"
+  "email": "eriawan@mail.com",
+  "password": "eriawan12345"
 }
 
 ###
@@ -42,11 +82,11 @@ POST http://localhost:3000/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "name": "Taufik Hidayat",
-  "email": "taufik@mail.com",
-  "password": "taufik12345",
-  "confirm_password": "taufik12345",
-  "role": "admin"
+  "name": "Eriawan Hidayat",
+  "email": "eriawan@mail.com",
+  "password": "eriawan12345",
+  "confirm_password": "eriawan12345",
+  "role": "user"
 }
 
 ###

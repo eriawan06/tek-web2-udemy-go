@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"github.com/eriawan06/tek-web2-udemy-go/src/modules/category/model/dto"
-	"github.com/eriawan06/tek-web2-udemy-go/src/modules/category/service"
+	"github.com/eriawan06/tek-web2-udemy-go/src/modules/course/model/dto"
+	"github.com/eriawan06/tek-web2-udemy-go/src/modules/course/service"
 	"github.com/eriawan06/tek-web2-udemy-go/src/utils"
 	"github.com/eriawan06/tek-web2-udemy-go/src/utils/common"
 	e "github.com/eriawan06/tek-web2-udemy-go/src/utils/errors"
@@ -11,22 +11,22 @@ import (
 	"strconv"
 )
 
-type CategoryControllerImpl struct {
-	Service service.CategoryService
+type CourseControllerImpl struct {
+	Service service.CourseService
 }
 
-func NewCategoryController(service service.CategoryService) CategoryController {
-	return &CategoryControllerImpl{Service: service}
+func NewCourseController(service service.CourseService) CourseController {
+	return &CourseControllerImpl{Service: service}
 }
 
-func (controller CategoryControllerImpl) Create(ctx *gin.Context) {
+func (controller CourseControllerImpl) Create(ctx *gin.Context) {
 	userClaims, err := utils.GetUserCredentialFromToken(ctx)
 	if err != nil {
 		common.SendError(ctx, http.StatusUnauthorized, "Invalid Token", []string{err.Error()})
 		return
 	}
 
-	var request dto.CreateCategoryRequest
+	var request dto.CreateCourseRequest
 	errorBinding := ctx.ShouldBindJSON(&request)
 	if errorBinding != nil {
 		// Check if there is EOF error
@@ -40,14 +40,8 @@ func (controller CategoryControllerImpl) Create(ctx *gin.Context) {
 		return
 	}
 
-	// Access Services
 	err = controller.Service.Create(userClaims, request)
 	if err != nil {
-		if err == e.ErrDuplicateKey {
-			common.SendError(ctx, http.StatusBadRequest, "Bad Request", []string{err.Error()})
-			return
-		}
-
 		if err == e.ErrForbidden {
 			common.SendError(ctx, http.StatusForbidden, "Forbidden", []string{err.Error()})
 			return
@@ -57,17 +51,17 @@ func (controller CategoryControllerImpl) Create(ctx *gin.Context) {
 		return
 	}
 
-	common.SendSuccess(ctx, http.StatusCreated, "Create Category Success", nil)
+	common.SendSuccess(ctx, http.StatusCreated, "Create Course Success", nil)
 }
 
-func (controller CategoryControllerImpl) Update(ctx *gin.Context) {
+func (controller CourseControllerImpl) Update(ctx *gin.Context) {
 	userClaims, err := utils.GetUserCredentialFromToken(ctx)
 	if err != nil {
 		common.SendError(ctx, http.StatusUnauthorized, "Invalid Token", []string{err.Error()})
 		return
 	}
 
-	var request dto.UpdateCategoryRequest
+	var request dto.UpdateCourseRequest
 	errorBinding := ctx.ShouldBindJSON(&request)
 	if errorBinding != nil {
 		// Check if there is EOF error
@@ -81,21 +75,20 @@ func (controller CategoryControllerImpl) Update(ctx *gin.Context) {
 		return
 	}
 
-	categoryId, err := strconv.Atoi(ctx.Param("id"))
+	courseId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		common.SendError(ctx, http.StatusBadRequest, "Invalid Id", []string{err.Error()})
 		return
 	}
 
-	// Access Services
-	err = controller.Service.Update(userClaims, request, uint(categoryId))
+	err = controller.Service.Update(userClaims, request, uint(courseId))
 	if err != nil {
 		if err == e.ErrDataNotFound {
 			common.SendError(ctx, http.StatusNotFound, "Data Not Found", []string{err.Error()})
 			return
 		}
 
-		if err == e.ErrForbidden {
+		if err == e.ErrForbidden || err == e.ErrNotTheOwner {
 			common.SendError(ctx, http.StatusForbidden, "Forbidden", []string{err.Error()})
 			return
 		}
@@ -104,31 +97,30 @@ func (controller CategoryControllerImpl) Update(ctx *gin.Context) {
 		return
 	}
 
-	common.SendSuccess(ctx, http.StatusOK, "Update Category Success", nil)
+	common.SendSuccess(ctx, http.StatusOK, "Update Course Success", nil)
 }
 
-func (controller CategoryControllerImpl) Delete(ctx *gin.Context) {
+func (controller CourseControllerImpl) Delete(ctx *gin.Context) {
 	userClaims, err := utils.GetUserCredentialFromToken(ctx)
 	if err != nil {
 		common.SendError(ctx, http.StatusUnauthorized, "Invalid Token", []string{err.Error()})
 		return
 	}
 
-	categoryId, err := strconv.Atoi(ctx.Param("id"))
+	courseId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		common.SendError(ctx, http.StatusBadRequest, "Invalid Id", []string{err.Error()})
 		return
 	}
 
-	// Access Service
-	err = controller.Service.Delete(userClaims, uint(categoryId))
+	err = controller.Service.Delete(userClaims, uint(courseId))
 	if err != nil {
 		if err == e.ErrDataNotFound {
 			common.SendError(ctx, http.StatusNotFound, "Data Not Found", []string{err.Error()})
 			return
 		}
 
-		if err == e.ErrForbidden {
+		if err == e.ErrForbidden || err == e.ErrNotTheOwner {
 			common.SendError(ctx, http.StatusForbidden, "Forbidden", []string{err.Error()})
 			return
 		}
@@ -137,27 +129,27 @@ func (controller CategoryControllerImpl) Delete(ctx *gin.Context) {
 		return
 	}
 
-	common.SendSuccess(ctx, http.StatusOK, "Delete Category Success", nil)
+	common.SendSuccess(ctx, http.StatusOK, "Delete Course Success", nil)
 }
 
-func (controller CategoryControllerImpl) GetAll(ctx *gin.Context) {
+func (controller CourseControllerImpl) GetAll(ctx *gin.Context) {
 	data, err := controller.Service.GetAll()
 	if err != nil {
 		common.SendError(ctx, http.StatusInternalServerError, "Internal Server Error", []string{err.Error()})
 		return
 	}
 
-	common.SendSuccess(ctx, http.StatusOK, "Get All Category Success", data)
+	common.SendSuccess(ctx, http.StatusOK, "Get All Course Success", data)
 }
 
-func (controller CategoryControllerImpl) GetOne(ctx *gin.Context) {
-	categoryId, err := strconv.Atoi(ctx.Param("id"))
+func (controller CourseControllerImpl) GetOne(ctx *gin.Context) {
+	courseId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		common.SendError(ctx, http.StatusBadRequest, "Invalid Id", []string{err.Error()})
 		return
 	}
 
-	data, err := controller.Service.GetOne(uint(categoryId))
+	data, err := controller.Service.GetOne(uint(courseId))
 	if err != nil {
 		if err == e.ErrDataNotFound {
 			common.SendError(ctx, http.StatusNotFound, "Data Not Found", []string{err.Error()})
@@ -168,5 +160,5 @@ func (controller CategoryControllerImpl) GetOne(ctx *gin.Context) {
 		return
 	}
 
-	common.SendSuccess(ctx, http.StatusOK, "Get One Category Success", data)
+	common.SendSuccess(ctx, http.StatusOK, "Get One Course Success", data)
 }

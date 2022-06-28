@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/auth/mapper"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/auth/model/dto"
 	ud "github.com/eriawan06/tek-web2-udemy-go/src/modules/user/model/dto"
@@ -54,6 +55,53 @@ func (service *AuthServiceImpl) Login(request dto.LoginRequest) (dto.AuthRespons
 	isPasswordValid := utils.CheckPasswordHash(request.Password, user.Password)
 	if !isPasswordValid {
 		return dto.AuthResponse{}, e.ErrWrongLoginCredential
+	}
+
+	// Generate Token
+	token, err := utils.GenerateToken(user)
+	if err != nil {
+		return dto.AuthResponse{}, err
+	}
+
+	// Return nil Error
+	return dto.AuthResponse{
+		Token: token,
+		User: ud.UserResponse{
+			Id:    user.Id,
+			Name:  user.Name,
+			Email: user.Email,
+			Role:  user.Role,
+		},
+	}, nil
+}
+
+func (service *AuthServiceImpl) GoogleOauth(request utils.GoogleUserResult) (dto.AuthResponse, error) {
+	var (
+		user ue.User
+		err  error
+	)
+
+	user, err = service.UserRepo.FindByEmail(request.Email)
+	if err != nil && err.Error() != "email is not registered" {
+		return dto.AuthResponse{}, err
+	}
+
+	// if user is not exist (user.id = 0), then create user with auth type google
+	if user.Id == 0 {
+		err = service.UserRepo.Create(mapper.GoogleUserResultToUser(request))
+		if err != nil {
+			return dto.AuthResponse{}, err
+		}
+
+		user, err = service.UserRepo.FindByEmail(request.Email)
+		if err != nil && err.Error() != "email is not registered" {
+			return dto.AuthResponse{}, err
+		}
+	}
+
+	// check auth type of existing user
+	if user.AuthType != "google" {
+		return dto.AuthResponse{}, errors.New("email was registered by other auth method")
 	}
 
 	// Generate Token

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/auth/model/dto"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/auth/service"
 	"github.com/eriawan06/tek-web2-udemy-go/src/utils"
@@ -78,4 +79,55 @@ func (controller *AuthControllerImpl) Login(ctx *gin.Context) {
 	}
 
 	common.SendSuccess(ctx, http.StatusOK, "Login Success", &response)
+}
+
+func (controller *AuthControllerImpl) GoogleOauth(ctx *gin.Context) {
+	code := ctx.Query("code")
+	if code == "" {
+		ctx.SetCookie("logged_in", "false", 1000*60, "/oauth/google/callback", "localhost", false, false)
+		ctx.SetCookie("error", "Authorization code not provided!", 1000*60, "/oauth/google/callback", "localhost", true, true)
+		ctx.Redirect(http.StatusTemporaryRedirect, "http://localhost:9000/oauth/google/callback")
+		//common.SendError(ctx, http.StatusUnauthorized, "Unauthorized", []string{"Authorization code not provided!"})
+		return
+	}
+
+	// Use the code to get the id and access tokens
+	tokenRes, err := utils.GetGoogleOauthToken(code)
+	if err != nil {
+		ctx.SetCookie("logged_in", "false", 1000*60, "/oauth/google/callback", "localhost", false, false)
+		ctx.SetCookie("error", err.Error(), 1000*60, "/oauth/google/callback", "localhost", true, true)
+		ctx.Redirect(http.StatusTemporaryRedirect, "http://localhost:9000/oauth/google/callback")
+		//common.SendError(ctx, http.StatusBadGateway, "Bad Gateway", []string{err.Error()})
+		return
+	}
+
+	googleUser, err := utils.GetGoogleUser(tokenRes.AccessToken, tokenRes.IdToken)
+	if err != nil {
+		ctx.SetCookie("logged_in", "false", 1000*60, "/oauth/google/callback", "localhost", false, false)
+		ctx.SetCookie("error", err.Error(), 1000*60, "/oauth/google/callback", "localhost", true, true)
+		ctx.Redirect(http.StatusTemporaryRedirect, "http://localhost:9000/oauth/google/callback")
+		//common.SendError(ctx, http.StatusBadGateway, "Bad Gateway", []string{err.Error()})
+		return
+	}
+
+	response, err := controller.Service.GoogleOauth(*googleUser)
+	if err != nil {
+		ctx.SetCookie("logged_in", "false", 1000*60, "/oauth/google/callback", "localhost", false, false)
+		ctx.SetCookie("error", err.Error(), 1000*60, "/oauth/google/callback", "localhost", true, true)
+		ctx.Redirect(http.StatusTemporaryRedirect, "http://localhost:9000/oauth/google/callback")
+		return
+	}
+
+	userData, err := json.Marshal(response.User)
+	if err != nil {
+		ctx.SetCookie("logged_in", "false", 1000*60, "/oauth/google/callback", "localhost", false, false)
+		ctx.SetCookie("error", err.Error(), 1000*60, "/oauth/google/callback", "localhost", true, true)
+		ctx.Redirect(http.StatusTemporaryRedirect, "http://localhost:9000/oauth/google/callback")
+		return
+	}
+
+	ctx.SetCookie("access_token", response.Token, 1000*60, "/oauth/google/callback", "localhost", true, true)
+	ctx.SetCookie("user", string(userData), 1000*60, "/oauth/google/callback", "localhost", true, true)
+	ctx.SetCookie("logged_in", "true", 1000*60, "/oauth/google/callback", "localhost", false, false)
+	ctx.Redirect(http.StatusTemporaryRedirect, "http://localhost:9000/oauth/google/callback")
 }

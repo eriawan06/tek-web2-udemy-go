@@ -15,6 +15,7 @@ type Course struct {
 	LearnSummary string  `gorm:"type:text;not null"`
 	Requirement  *string `gorm:"type:text"`
 	Description  *string `gorm:"type:text"`
+	CoverImage   *string `gorm:"type:varchar(255);null"`
 }
 
 type CourseLite struct {
@@ -22,6 +23,8 @@ type CourseLite struct {
 	Code       string
 	Name       string
 	Excerpt    string
+	CoverImage *string
+	Author     string
 	Categories CourseCategoryDetailList
 }
 
@@ -34,6 +37,7 @@ type CourseDetail struct {
 	LearnSummary string
 	Requirement  *string
 	Description  *string
+	CoverImage   *string
 	Categories   CourseCategoryDetailList
 	//Modules
 	//Reviews

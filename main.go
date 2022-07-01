@@ -6,6 +6,7 @@ import (
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/auth"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/category"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/course"
+	"github.com/eriawan06/tek-web2-udemy-go/src/modules/general/upload"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/user"
 	"github.com/gin-gonic/gin"
 	"os"
@@ -21,6 +22,7 @@ func main() {
 	user.New(db).InitModule()
 	category.New(db).InitModule()
 	course.New(db).InitModule()
+	upload.New().InitModule()
 
 	// Get Gin Mode from ENV
 	mode := os.Getenv("GIN_MODE")
@@ -32,8 +34,10 @@ func main() {
 	app := gin.Default()
 
 	// Setup CORS
-	// app.Use(cors.Default())
+	//app.Use(cors.Default())
+
 	app.Use(middlewares.CORSMiddleware())
+
 	//app.Use(cors.New(cors.Config{
 	//	AllowOrigins:     []string{"https://foo.com"},
 	//	AllowMethods:     []string{"PUT", "POST", "GET"},

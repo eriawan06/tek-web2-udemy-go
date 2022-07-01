@@ -41,7 +41,7 @@ func (repository *CourseRepositoryImpl) FindAll() ([]entity.CourseLite, error) {
 	var courses []entity.CourseLite
 
 	query := `
-	SELECT c.id, c.code, c.name, c.excerpt,
+	SELECT c.id, c.code, c.name, c.excerpt, c.cover_image, u.name author,
 		(select jsonb_agg(json_build_object(
 				'id', cc.id,
 				'category_id', cat.id,
@@ -51,6 +51,7 @@ func (repository *CourseRepositoryImpl) FindAll() ([]entity.CourseLite, error) {
 			WHERE cc.course_code = c.code
 		) categories
 	FROM courses c
+	LEFT JOIN users u ON u.id = c.user_id
 	`
 	result := repository.DB.Raw(query).Scan(&courses)
 	if result.Error != nil {

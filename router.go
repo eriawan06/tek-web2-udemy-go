@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/category"
 	"github.com/eriawan06/tek-web2-udemy-go/src/modules/course"
+	"github.com/eriawan06/tek-web2-udemy-go/src/modules/general/upload"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -36,6 +37,7 @@ func SetupRoutes(app *gin.Engine) {
 
 			category.NewRouter(private.Group("/categories"))
 			course.NewRouter(private.Group("/courses"))
+			upload.NewRouter(private.Group("/upload"))
 		}
 	}
 }

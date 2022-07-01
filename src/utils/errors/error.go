@@ -12,4 +12,6 @@ var (
 	ErrEmailAlreadyExists     = errors.New("email already exist")
 	ErrEmailNotRegistered     = errors.New("email is not registered")
 	ErrConfirmPasswordNotSame = errors.New("password and confirm password are not same")
+	ErrUnsupportedFileFormat  = errors.New("file format is not supported")
+	ErrWrongFileUploadPath    = errors.New("wrong file upload path")
 )

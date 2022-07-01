@@ -17,6 +17,7 @@ func CreateCourseRequestToCourse(claims ad.UserClaims, request dto.CreateCourseR
 		LearnSummary: request.LearnSummary,
 		Requirement:  request.Requirement,
 		Description:  request.Description,
+		CoverImage:   request.CoverImage,
 		BaseEntity: common.BaseEntity{
 			CreatedBy: claims.Email,
 			UpdatedBy: claims.Email,
@@ -31,6 +32,7 @@ func UpdateCourseRequestToCourse(claims ad.UserClaims, request dto.UpdateCourseR
 		LearnSummary: request.LearnSummary,
 		Requirement:  request.Requirement,
 		Description:  request.Description,
+		CoverImage:   request.CoverImage,
 		BaseEntity: common.BaseEntity{
 			UpdatedBy: claims.Email,
 		},
@@ -43,6 +45,8 @@ func CourseLiteToCourseResponse(cl entity.CourseLite) dto.CourseResponse {
 		Code:       cl.Code,
 		Name:       cl.Name,
 		Excerpt:    cl.Excerpt,
+		CoverImage: cl.CoverImage,
+		Author:     cl.Author,
 		Categories: cl.Categories,
 	}
 }
@@ -64,6 +68,7 @@ func CourseDetailToCourseDetailResponse(cd entity.CourseDetail) dto.CourseDetail
 		LearnSummary: cd.LearnSummary,
 		Requirement:  cd.Requirement,
 		Description:  cd.Description,
+		CoverImage:   cd.CoverImage,
 		Categories:   cd.Categories,
 	}
 }

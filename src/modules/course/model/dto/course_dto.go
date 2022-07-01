@@ -8,6 +8,7 @@ type CreateCourseRequest struct {
 	LearnSummary string  `json:"learn_summary" binding:"required"`
 	Requirement  *string `json:"requirement"`
 	Description  *string `json:"description"`
+	CoverImage   *string `json:"cover_image"`
 	Categories   []uint  `json:"categories"` //slice of category_ids
 }
 
@@ -17,6 +18,7 @@ type UpdateCourseRequest struct {
 	LearnSummary string  `json:"learn_summary" binding:"required"`
 	Requirement  *string `json:"requirement"`
 	Description  *string `json:"description"`
+	CoverImage   *string `json:"cover_image"`
 }
 
 type CourseResponse struct {
@@ -24,6 +26,8 @@ type CourseResponse struct {
 	Code       string                          `json:"course_code"`
 	Name       string                          `json:"name"`
 	Excerpt    string                          `json:"excerpt"`
+	CoverImage *string                         `json:"cover_image"`
+	Author     string                          `json:"author"`
 	Categories entity.CourseCategoryDetailList `json:"categories"`
 }
 
@@ -36,5 +40,6 @@ type CourseDetailResponse struct {
 	LearnSummary string                          `json:"learn_summary"`
 	Requirement  *string                         `json:"requirement"`
 	Description  *string                         `json:"description"`
+	CoverImage   *string                         `json:"cover_image"`
 	Categories   entity.CourseCategoryDetailList `json:"categories"`
 }
